@@ -1,0 +1,24 @@
+version: "3.7"
+
+services:
+  web:
+    build: .
+    command: bash -c "gunicorn run:app --workers 4 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:6111"
+    env_file: .env
+    volumes:
+      - .:/app
+    ports:
+      - 6111:6111
+
+  celery:
+    build: .
+    command: celery -A worker worker -B -l INFO
+    env_file: .env
+    volumes:
+      - .:/app
+    depends_on:
+      - web
+      - redis
+
+  redis:
+    image: redis:6.2
