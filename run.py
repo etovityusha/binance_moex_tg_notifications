@@ -1,11 +1,9 @@
 from celery.result import AsyncResult
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
-from fastapi.staticfiles import StaticFiles
 import uvicorn
 
 app = FastAPI()
-app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 @app.get("/tasks/{task_id}")
